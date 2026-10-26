@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grey Search Africa · Tableau de bord du cabinet</title>
+<meta name="robots" content="noindex">
+<style>
+</style><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet"><style>
+:root{--ch:#1C1C1E;--ch2:#26262A;--en:#2B2A30;--bl:#066AAB;--bl2:#3E8FC6;--or:#C8921A;--or2:#E2AE3C;--sa:#F5F2EC;--fi:#E6E1D7;--gr:#86848C;--ro:#B5432F;--ve:#2E7D5B;--vi:#6B4E9B}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Work Sans',system-ui,sans-serif;color:var(--en);background:var(--sa);font-size:14px}
+h1,h2,h3,.kv-v,.tab,.big{font-family:'Montserrat','Work Sans',sans-serif}
+svg.i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* header */
+header{background:radial-gradient(1200px 300px at 85% -40%,#3a3320 0,transparent 60%),var(--ch);color:#fff;padding:20px 32px 22px}
+.hrow{display:flex;align-items:center;gap:22px;flex-wrap:wrap;max-width:1380px;margin:0 auto}
+header img{height:50px}
+.ht{flex:1;min-width:240px}
+.ht .k{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--or2);font-weight:600}
+.ht h1{margin:5px 0 0;font-size:22px;font-weight:700}
+.maj{font-size:12px;color:#BDB9B0;text-align:right;display:flex;gap:8px;align-items:center}
+.conf{border:1px solid var(--or2);color:var(--or2);font-size:10px;letter-spacing:.14em;padding:6px 11px;text-transform:uppercase;font-weight:600;display:flex;gap:6px;align-items:center}
+.conf svg.i{width:13px;height:13px}
+.demo{background:#3a3320;color:#F3D99A;font-size:12px;text-align:center;padding:7px 16px}
+/* nav */
+nav{background:#fff;border-bottom:1px solid var(--fi);position:sticky;top:0;z-index:6}
+.nrow{max-width:1380px;margin:0 auto;padding:0 32px;display:flex;gap:2px;overflow-x:auto}
+.tab{background:none;border:0;padding:15px 16px;font-size:13px;font-weight:600;color:var(--gr);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;display:flex;gap:8px;align-items:center}
+.tab:hover{color:var(--en)}.tab.on{color:var(--ch);border-bottom-color:var(--or)}
+.tab .c{background:var(--sa);color:var(--en);font-size:11px;padding:1px 7px;border-radius:10px}
+main{padding:24px 32px 60px;max-width:1380px;margin:0 auto}
+section{display:none;animation:f .25s}section.on{display:block}
+@keyframes f{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--fi);padding:16px 18px;display:flex;gap:14px;align-items:flex-start;position:relative;overflow:hidden}
+.kpi .ic{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--sa);color:var(--ch);flex:none}
+.kpi .ic svg.i{width:20px;height:20px}
+.kpi.or .ic{background:#FBF1D9;color:#8A5E00}.kpi.ro .ic{background:#F6DED8;color:var(--ro)}.kpi.bl .ic{background:#DDEBF5;color:var(--bl)}.kpi.ve .ic{background:#E2EFE8;color:var(--ve)}
+.kpi .big{font-size:28px;font-weight:700;color:var(--ch);line-height:1}
+.kpi .l{font-size:12px;color:var(--gr);margin-top:6px;line-height:1.35}
+.kpi .spark{position:absolute;right:10px;bottom:8px;opacity:.9}
+/* layout */
+.g2{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:1050px){.g2,.g3{grid-template-columns:1fr}}
+@media(max-width:700px){main,.nrow{padding-left:14px;padding-right:14px}header{padding:16px}.maj{display:none}}
+.card{background:#fff;border:1px solid var(--fi);padding:18px 20px;margin-bottom:18px}
+.card h2{font-size:15px;margin:0;color:var(--ch);display:flex;gap:8px;align-items:center}
+.card h2 svg.i{color:var(--or)}
+.card .s{font-size:12px;color:var(--gr);margin:4px 0 14px}
+.chd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:12px;margin-top:10px}
+.legend span{display:flex;align-items:center;gap:6px}.legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.chart text{font-family:'Work Sans',sans-serif}
+.tip{position:fixed;pointer-events:none;background:var(--ch);color:#fff;font-size:12px;padding:7px 10px;border-radius:3px;z-index:50;opacity:0;transition:opacity .12s;max-width:260px}
+/* alertes */
+.al{display:flex;gap:12px;padding:11px 12px;margin:8px 0;background:#FBFAF7;border:1px solid var(--fi);cursor:pointer;transition:background .15s}
+.al:hover{background:#F6F2EA}
+.al .ai{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex:none}
+.al.haut .ai{background:#F6DED8;color:var(--ro)}.al.moyen .ai{background:#FBF1D9;color:#8A5E00}.al.bas .ai{background:#DDEBF5;color:var(--bl)}
+.al .t{font-weight:600;font-size:13px}.al .d{font-size:12px;color:#55535B;margin-top:3px;line-height:1.4}.al .q{font-size:11px;color:var(--gr);margin-top:4px}
+/* pills */
+.pill{display:inline-flex;gap:5px;align-items:center;font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.pill:before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.p-bloq{background:#F6DED8;color:var(--ro)}.p-att{background:#FBF1D9;color:#7A5300}.p-cours{background:#DDEBF5;color:var(--bl)}.p-clos{background:#E2EFE8;color:var(--ve)}
+.p-new{background:var(--or);color:#fff}.p-new:before{display:none}
+/* mandats */
+.mandats{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.m{background:#fff;border:1px solid var(--fi);padding:18px 20px;cursor:pointer;transition:box-shadow .15s,transform .15s;display:flex;flex-direction:column}
+.m:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);transform:translateY(-2px)}
+.m .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.m .fam{display:flex;gap:8px;align-items:center;font-size:11px;color:var(--gr);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.m .fam .ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--ch);color:var(--or2)}
+.m .fam .ic svg.i{width:15px;height:15px}
+.m h3{margin:12px 0 2px;font-size:16.5px;color:var(--ch)}
+.m .lieu{font-size:12px;color:var(--gr);display:flex;gap:5px;align-items:center}.m .lieu svg.i{width:13px;height:13px}
+.m .cl{font-size:12px;color:var(--en);margin-top:2px}
+.steps{display:flex;gap:3px;margin:16px 0 6px}.steps i{flex:1;height:7px;background:var(--fi);border-radius:2px}.steps i.f{background:var(--ch)}.steps i.c{background:var(--or)}
+.m .et{font-size:12px;font-weight:600;display:flex;justify-content:space-between}
+.m .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.m .stats div{background:var(--sa);padding:8px;text-align:center}
+.m .stats b{display:block;font-family:Montserrat;font-size:17px;color:var(--ch)}.m .stats span{font-size:10.5px;color:var(--gr)}
+.m .bl{font-size:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--fi);color:#55535B;line-height:1.45}
+.m .bl b{color:var(--ch)}
+/* filtres */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+select,input{font:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--fi);background:#fff;color:var(--en)}
+.srch{position:relative}.srch svg.i{position:absolute;left:9px;top:9px;width:16px;height:16px;color:var(--gr)}.srch input{padding-left:32px;min-width:250px}
+.seg{display:inline-flex;border:1px solid var(--fi);background:#fff}
+.seg button{border:0;background:none;padding:8px 13px;font:inherit;font-size:12.5px;cursor:pointer;color:var(--gr);display:flex;gap:6px;align-items:center}
+.seg button svg.i{width:15px;height:15px}.seg button.on{background:var(--ch);color:#fff}
+/* tables */
+.tw{overflow-x:auto;background:#fff;border:1px solid var(--fi)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gr);padding:11px 10px;border-bottom:2px solid var(--ch);font-weight:600;cursor:pointer;white-space:nowrap;background:#fff;position:sticky;top:0}
+td{padding:9px 10px;border-bottom:1px solid var(--fi);vertical-align:middle}
+tr:hover td{background:#FBFAF7}
+td .sub{color:var(--gr);font-size:11.5px}
+a{color:var(--bl);text-decoration:none}a:hover{text-decoration:underline}
+.av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-family:Montserrat;font-weight:700;font-size:11px;color:#fff;flex:none}
+.who{display:flex;gap:10px;align-items:center}
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.score .b{flex:1;height:6px;background:var(--fi);border-radius:3px;overflow:hidden}.score .b i{display:block;height:100%;border-radius:3px}
+.score b{font-family:Montserrat;width:26px;text-align:right}
+.lk{display:inline-flex;gap:4px;align-items:center;font-size:12px}.lk svg.i{width:14px;height:14px}
+.lk.off{color:var(--gr)}
+/* kanban */
+.kanban{display:grid;grid-template-columns:repeat(9,minmax(180px,1fr));gap:10px;overflow-x:auto;padding-bottom:8px}
+.col{background:#EFEBE3;padding:10px;min-height:140px}
+.col h4{margin:0 0 9px;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--en);display:flex;justify-content:space-between}
+.col h4 span{background:#fff;border-radius:10px;padding:0 7px}
+.cc{background:#fff;border:1px solid var(--fi);border-left:3px solid var(--ch);padding:8px 9px;margin-bottom:7px;font-size:12px;cursor:grab}
+.cc b{display:block;font-size:12.5px;color:var(--ch)}.cc span{color:var(--gr);font-size:11px}
+.col.over{outline:2px dashed var(--or)}
+/* drawer */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(600px,100%);background:#fff;box-shadow:-8px 0 30px rgba(0,0,0,.15);transform:translateX(105%);transition:transform .25s,visibility .25s;visibility:hidden;z-index:20;overflow-y:auto}
+.drawer.on{transform:none;visibility:visible}
+.drawer .hd{background:var(--ch);color:#fff;padding:24px 26px}
+.drawer .hd .k{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--or2)}
+.drawer .hd h2{margin:6px 0 2px;font-size:20px}
+.drawer .bd{padding:20px 26px}
+.drawer .x{position:absolute;top:14px;right:18px;background:none;border:0;color:#fff;font-size:26px;cursor:pointer}
+.drawer h3{font-size:12px;margin:22px 0 8px;color:var(--ch);text-transform:uppercase;letter-spacing:.08em;display:flex;gap:7px;align-items:center}
+.drawer h3 svg.i{color:var(--or);width:16px;height:16px}
+.kv{font-size:13px}.kv div{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid var(--fi)}.kv div span:first-child{width:140px;color:var(--gr);flex:none}
+.shade{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;z-index:15}.shade.on{display:block}
+.small{font-size:12px;color:var(--gr);line-height:1.5}
+.hyp{background:#FBF1D9;color:#7A5300;padding:0 4px}
+.btn{background:var(--ch);color:#fff;border:0;padding:9px 14px;font:inherit;font-size:12.5px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.btn.lt{background:#fff;color:var(--en);border:1px solid var(--fi)}
+/* livrables */
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.lv{background:#fff;border:1px solid var(--fi);padding:14px;display:flex;gap:12px;align-items:flex-start;transition:box-shadow .15s}
+.lv:hover{box-shadow:0 6px 18px rgba(0,0,0,.07)}
+.lv .fi{width:38px;height:46px;flex:none;display:grid;place-items:center;font-size:9px;font-weight:700;color:#fff;font-family:Montserrat;clip-path:polygon(0 0,72% 0,100% 22%,100% 100%,0 100%)}
+.lv b{font-size:13px;color:var(--ch);display:block}.lv .sub{font-size:11.5px;color:var(--gr);margin-top:3px}
+.pipe{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+@media(max-width:800px){.pipe{grid-template-columns:repeat(2,1fr)}}
+.pc{background:#F5F2EC;padding:10px 8px;min-height:190px}.pc:nth-child(even){background:#FBFAF7}
+.pc .pn{font-family:Montserrat;font-weight:700;font-size:20px;color:var(--ch);text-align:center}.pc.vide .pn{color:#C9C4BA}
+.pc .pl{font-size:11px;color:#55535B;text-align:center;min-height:30px;line-height:1.3;margin-bottom:8px}
+.pm{background:#fff;border:1px solid var(--fi);border-left:4px solid;padding:7px 8px;margin-bottom:7px;cursor:pointer;transition:transform .12s}
+.pm:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.08)}
+.pm b{display:block;font-size:11.5px;line-height:1.25;color:var(--ch)}.pm span{display:flex;gap:3px;align-items:center;font-size:10.5px;color:var(--gr);margin-top:5px}
+.pm span i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.kpis{grid-template-columns:repeat(4,1fr)}@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.hbars{margin:14px 0 4px}.hb{display:grid;grid-template-columns:230px 1fr 190px;gap:12px;align-items:center;margin:7px 0;font-size:12.5px}
+.ht{position:relative;height:14px;background:#F5F2EC}.ht i{position:absolute;left:0;top:0;height:14px}.hv{background:#E6E1D7}.hp{background:#C8921A}
+.hx{font-size:12px;color:#55535B}.hx b{color:var(--ch)}
+@media(max-width:700px){.hb{grid-template-columns:1fr}}
+#probas input{width:52px}
+footer{text-align:center;font-size:11px;color:var(--gr);padding:24px}
+.hon td input{width:130px}
+</style>
+</head>
+<body>
+<header><div class="hrow">
+  <img src="https://greysearchafrica.com/wp-content/uploads/2025/04/GSA-LOGO-BLANC-1.png" alt="Grey Search Africa">
+  <div class="ht"><div class="k">Cabinet de chasse de tête · pilotage des mandats</div><h1>Tableau de bord du cabinet</h1></div>
+  <div class="maj"><svg class="i"><use href="#i-clock"/></svg><span>Données au <b id="maj"></b><br>Source : dossiers des mandats</span></div>
+  <div class="conf"><svg class="i"><use href="#i-lock"/></svg>Démonstration · données anonymisées</div>
+</div></header>
+<div class="demo" id="demo" style="display:none">Démonstration non officielle préparée pour Grey Search Africa · personnes anonymisées, clients sous pseudonyme, aucun document joint</div>
+<nav><div class="nrow">
+  <button class="tab on" data-t="vue"><svg class="i"><use href="#i-grid"/></svg>Vue d'ensemble</button>
+  <button class="tab" data-t="mandats"><svg class="i"><use href="#i-brief"/></svg>Mandats <span class="c" id="cM"></span></button>
+  <button class="tab" data-t="cand"><svg class="i"><use href="#i-users"/></svg>Candidats <span class="c" id="cC"></span></button>
+  <button class="tab" data-t="liv"><svg class="i"><use href="#i-file"/></svg>Livrables <span class="c" id="cL"></span></button>
+  <button class="tab" data-t="hon"><svg class="i"><use href="#i-coins"/></svg>Honoraires</button>
+</div></nav>
+<main>
+<section id="vue" class="on">
+  <div class="kpis" id="kpis"></div>
+  <div class="g2">
+    <div class="card"><div class="chd"><div><h2><svg class="i"><use href="#i-route"/></svg>Où en sont les mandats</h2><div class="s">Les sept étapes d'un mandat, du cadrage à la clôture · un rond par poste à pourvoir</div></div></div><div id="pipe" class="chart"></div></div>
+    <div class="card"><h2><svg class="i"><use href="#i-pie"/></svg>Statut des mandats</h2><div class="s">Qui a la main aujourd'hui</div><div id="donut" class="chart"></div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="chd"><div><h2><svg class="i"><use href="#i-funnel"/></svg>Entonnoir de chasse</h2><div class="s">Du marché aux candidats approchés · aucun contact pris à ce jour</div></div><select id="fSel"></select></div><div id="funnel" class="chart"></div></div>
+    <div class="card"><h2><svg class="i"><use href="#i-alert"/></svg>À traiter cette semaine</h2><div class="s">Cliquez pour ouvrir le mandat</div><div id="alertes"></div></div>
+  </div>
+  <div class="g3">
+    <div class="card"><h2><svg class="i"><use href="#i-chart"/></svg>Qualité du vivier</h2><div class="s">Répartition des notes sur 100 (candidats notés)</div><div id="histo" class="chart"></div></div>
+    <div class="card"><h2><svg class="i"><use href="#i-clock"/></svg>Ancienneté des mandats</h2><div class="s">Jours depuis l'ouverture</div><div id="age" class="chart"></div></div>
+    <div class="card"><h2><svg class="i"><use href="#i-pin"/></svg>Géographie et fonctions</h2><div class="s">Postes à pourvoir par pays et par famille de métier</div><div id="geo"></div></div>
+  </div>
+  <div class="card"><h2><svg class="i"><use href="#i-file"/></svg>Production de livrables</h2><div class="s">Documents présents dans les dossiers, par étape du mandat</div><div id="prod" class="chart"></div></div>
+</section>
+
+<section id="mandats">
+  <div class="filters">
+    <select id="fStatut"><option value="">Tous les statuts</option></select>
+    <select id="fPays"><option value="">Tous les pays</option></select>
+    <select id="fFam"><option value="">Toutes les fonctions</option></select>
+    <span class="small" id="nbM"></span>
+  </div>
+  <div class="mandats" id="listeM"></div>
+</section>
+
+<section id="cand">
+  <div class="filters">
+    <div class="seg" id="segC"><button class="on" data-v="table"><svg class="i"><use href="#i-list"/></svg>Tableau</button><button data-v="kanban"><svg class="i"><use href="#i-cols"/></svg>Par étape</button></div>
+    <select id="fcM"><option value="">Tous les mandats</option></select>
+    <select id="fcE"><option value="">Toutes les étapes</option></select>
+    <div class="srch"><svg class="i"><use href="#i-search"/></svg><input type="search" id="fcQ" placeholder="Rechercher un nom, une entreprise"></div>
+    <button class="btn lt" id="reset"><svg class="i"><use href="#i-undo"/></svg>Données d'origine</button>
+  </div>
+  <div class="small" style="margin-bottom:10px">Faites glisser une carte dans la vue « Par étape », ou changez l'étape dans le tableau : le choix reste dans ce navigateur. Aucun candidat n'est contacté depuis cette page. Les scores « indicatifs » sont lus sur le seul profil public.</div>
+  <div id="vTable" class="tw"></div>
+  <div id="vKanban" style="display:none"></div>
+</section>
+
+<section id="liv">
+  <div class="filters">
+    <select id="flM"><option value="">Tous les mandats</option></select>
+    <select id="flT"><option value="">Toutes les étapes</option></select>
+    <label class="small"><input type="checkbox" id="flN"> Nouveaux seulement</label>
+    <span class="small" id="nbL"></span>
+  </div>
+  <div class="lgrid" id="tLiv"></div>
+</section>
+
+<section id="hon">
+  <div class="card">
+    <h2><svg class="i"><use href="#i-coins"/></svg>Prévision d'honoraires</h2>
+    <div class="s">Saisissez vos propres conditions : aucun taux ni salaire n'est pré-rempli. Le calcul reste dans ce navigateur.</div>
+    <div class="filters"><label class="small">Taux d'honoraires par défaut (% du salaire annuel) <input type="number" id="tx" min="0" max="50" step="0.5" placeholder="votre taux"></label></div>
+    <div id="tHon" class="tw"></div>
+    <div class="kpis" style="margin-top:18px" id="kHon"></div>
+    <div id="cHon" class="chart"></div>
+    <div class="small">Probabilité d'aboutir selon l'étape : hypothèse de départ, à remplacer par vos propres taux. <span id="probas"></span></div>
+  </div>
+</section>
+</main>
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer"><button class="x" id="dx">×</button><div id="dContent"></div></aside>
+<div class="tip" id="tip"></div>
+<footer>Grey Search Africa · We connect Grey Talent to Great Partners all over Africa · Démonstration, données des mandats au 26/10/2026</footer>
+
+<svg width="0" height="0" style="position:absolute">
+ <symbol id="i-brief" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></symbol>
+ <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c2 .7 3.2 2.4 3.5 5.2"/></symbol>
+ <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></symbol>
+ <symbol id="i-coins" viewBox="0 0 24 24"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7"/><path d="M9 15v2c0 1.7 2.7 3 6 3s6-1.3 6-3v-5c0-1.6-2.4-2.9-5.5-3"/></symbol>
+ <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+ <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+ <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+ <symbol id="i-pause" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6"/></symbol>
+ <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></symbol>
+ <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="5" r="2.5"/><path d="M8.5 19H17a3.5 3.5 0 0 0 0-7H7a3.5 3.5 0 0 1 0-7h8.5"/></symbol>
+ <symbol id="i-pie" viewBox="0 0 24 24"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></symbol>
+ <symbol id="i-funnel" viewBox="0 0 24 24"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></symbol>
+ <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16v-4M11 16V8M15 16v-6M19 16V5"/></symbol>
+ <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+ <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+ <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+ <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+ <symbol id="i-cols" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="11" rx="1"/><rect x="17" y="4" width="4" height="7" rx="1"/></symbol>
+ <symbol id="i-undo" viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M3 13a9 9 0 1 0 3-7"/></symbol>
+ <symbol id="i-in" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7h.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></symbol>
+ <symbol id="i-cv" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><circle cx="10" cy="13" r="2"/><path d="M7 18c.5-1.5 1.6-2.2 3-2.2s2.5.7 3 2.2"/></symbol>
+ <symbol id="i-money" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></symbol>
+ <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></symbol>
+ <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></symbol>
+ <symbol id="i-desk" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+ <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol>
+</svg>
+
+<script>
+const D = {"mandats": [{"id": "dirco", "nom": "Directeur commercial", "client": "Société de distribution", "lieu": "Abidjan, Côte d'Ivoire", "pays": "Côte d'Ivoire", "postes": 1, "ouvert": "2026-10-21", "etape": 5, "statut": "En attente client", "qui": "Consultante GSA", "pour": "", "bloque": "Package, identité de l'employeur, références du candidat B non prises", "action": "Obtenir le package validé ; prendre les références avec l'accord écrit du candidat", "dossier": "", "drive": "", "entonnoir": [["Résultats LinkedIn", 454], ["Profils lus", 25], ["Short-list", 8], ["Vivier élargi (carte)", 18], ["Approchés", 0]], "secteur": "Distribution", "famille": "Commercial"}, {"id": "cdz", "nom": "Chefs de zone commerciale (x2)", "client": "Société de distribution", "lieu": "Dakar, Sénégal", "pays": "Sénégal", "postes": 2, "ouvert": "2026-10-21", "etape": 2, "statut": "En attente client", "qui": "Consultante GSA", "pour": "2026-10-27", "bloque": "Annonces prêtes mais non publiées ; infos client (secteur, zones, rémunération)", "action": "Valider et publier les annonces ; reporter la clôture du 02/11 au 09/11", "dossier": "", "drive": "", "entonnoir": [["Annonces prêtes", 6], ["Publiées", 0], ["Candidatures", null]], "secteur": "Distribution", "famille": "Commercial"}, {"id": "raf", "nom": "Responsable administratif et financier", "client": "Client à confirmer", "lieu": "Pays à confirmer", "pays": "À confirmer", "postes": 1, "ouvert": "2026-10-23", "etape": 1, "statut": "Bloqué", "qui": "Consultante GSA", "pour": "", "bloque": "Pays, secteur, périmètre et rémunération inconnus", "action": "Tenir le rendez-vous de cadrage avec le questionnaire ; valider la fiche provisoire", "dossier": "", "drive": "", "entonnoir": [], "secteur": "À confirmer", "famille": "Finance"}, {"id": "cdg", "nom": "Contrôleur de gestion", "client": "Client à confirmer", "lieu": "À confirmer", "pays": "Côte d'Ivoire", "postes": 1, "ouvert": "2026-10-23", "etape": 1, "statut": "En attente client", "qui": "Consultante GSA", "pour": "", "bloque": "Décision du DG du client sur l'ouverture du poste", "action": "Présenter le business case au DG ; ouvrir le mandat si accord", "dossier": "", "drive": "", "entonnoir": [], "secteur": "À confirmer", "famille": "Finance"}, {"id": "om", "nom": "Office manager", "client": "Client confidentiel", "lieu": "Abidjan, Côte d'Ivoire", "pays": "Côte d'Ivoire", "postes": 1, "ouvert": "2026-10-26", "etape": 6, "statut": "En cours", "qui": "Consultante GSA", "pour": "2026-10-30", "bloque": "Nom de la personne retenue, manager, date de fin d'essai ; notes d'entretien absentes", "action": "Recevoir le finaliste en entretien final ; prendre les références ; préparer l'arrivée du 2 novembre", "dossier": "", "drive": "", "entonnoir": [["CV étudiés", 3], ["Finalistes notés", 3], ["À présenter", 2]], "secteur": "Services", "famille": "Support"}, {"id": "brass", "nom": "Directeur financier", "client": "Brasseur international (mise en situation)", "lieu": "Abidjan, Côte d'Ivoire", "pays": "Côte d'Ivoire", "postes": 1, "ouvert": "2026-10-26", "etape": 2, "statut": "En cours", "qui": "Consultante GSA", "pour": "", "secteur": "Boissons", "famille": "Finance", "bloque": "Proposition à signer ; liste des entreprises à ne pas chasser à confirmer", "action": "Faire valider la carte des talents et lancer la vague 1 des approches", "dossier": "", "drive": "", "entonnoir": [["Profils identifiés", 15], ["Approchés", 0], ["Qualifiés", 0], ["Présentés", 0]]}, {"id": "ycto", "nom": "Chief Technology Officer", "client": "Startup IA (mise en situation)", "lieu": "Abidjan, Côte d'Ivoire", "pays": "Côte d'Ivoire", "postes": 1, "ouvert": "2026-06-22", "etape": 3, "statut": "En cours", "qui": "Consultante GSA", "pour": "", "secteur": "Tech et IA", "famille": "Tech", "bloque": "Aucun candidat reçu au-dessus du seuil de 75 ; budget, capital et télétravail à décider", "action": "Passer en chasse directe : ingénieurs plateforme seniors d'Abidjan en premier", "dossier": "", "drive": "", "entonnoir": [["Candidatures reçues", 30], ["Dossiers lus et notés", 4], ["Au-dessus du seuil", 0], ["Profils de marché", 9], ["Approchés", 0]]}, {"id": "ybdm", "nom": "Business Development Manager", "client": "Startup IA (mise en situation)", "lieu": "Abidjan, Côte d'Ivoire", "pays": "Côte d'Ivoire", "postes": 1, "ouvert": "2026-06-22", "etape": 3, "statut": "En cours", "qui": "Consultante GSA", "pour": "", "secteur": "Tech et IA", "famille": "Commercial", "bloque": "Candidats bien notés déjà écartés dans le logiciel de recrutement : motifs à relire", "action": "Réexaminer les dossiers écartés trop vite ; approcher la short-list sourcée", "dossier": "", "drive": "", "entonnoir": [["Candidatures reçues", 45], ["Profils sourcés", 33], ["Short-list", 8], ["Approchés", 0]]}], "etapes": ["Besoin à cadrer", "Sourcing", "Tri des candidatures", "Évaluation", "Décision et offre", "Intégration", "Clos"], "candidats": [{"m": "dirco", "nom": "Profil DIRC-01", "poste": "dir. commercial et marketing", "depuis": "", "li": "", "cv": "", "note": 98, "etape": "Identifié", "src": "Short-list LinkedIn du 21/10", "info": "", "entreprise": "", "titre": "dir. commercial et marketing"}, {"m": "dirco", "nom": "Profil DIRC-02", "poste": "dir. commercial et marketing", "depuis": "", "li": "", "cv": "", "note": 94, "etape": "Identifié", "src": "Short-list LinkedIn du 21/10", "info": "", "entreprise": "", "titre": "dir. commercial et marketing"}, {"m": "dirco", "nom": "Profil DIRC-03", "poste": "Commercial Director", "depuis": "", "li": "", "cv": "", "note": 93, "etape": "Identifié", "src": "Short-list LinkedIn du 21/10", "info": "", "entreprise": "", "titre": "Commercial Director"}, {"m": "dirco", "nom": "Profil DIRC-04", "poste": "dir. des ventes", "depuis": "", "li": "", "cv": "", "note": 90, "etape": "Identifié", "src": "Short-list LinkedIn du 21/10", "info": "", "entreprise": "", "titre": "dir. des ventes"}, {"m": "dirco", "nom": "Profil DIRC-05", "poste": "Sales Director", "depuis": "", "li": "", "cv": "", "note": 90, "etape": "Identifié", "src": "Short-list LinkedIn du 21/10", "info": "", "entreprise": "", "titre": "Sales Director"}, {"m": "dirco", "nom": "Profil DIRC-06", "poste": "directeur commercial", "depuis": "", "li": "", "cv": "", "note": 85, "etape": "Identifié", "src": "Short-list LinkedIn du 21/10", "info": "", "entreprise": "", "titre": "directeur commercial"}, {"m": "dirco", "nom": "Profil DIRC-07", "poste": "directeur commercial", "depuis": "", "li": "", "cv": "", "note": 84, "etape": "Identifié", "src": "Short-list LinkedIn du 21/10", "info": "", "entreprise": "", "titre": "directeur commercial"}, {"m": "dirco", "nom": "Profil DIRC-08", "poste": "Commercial and Marketing Dir.", "depuis": "", "li": "", "cv": "", "note": 82, "etape": "Identifié", "src": "Short-list LinkedIn du 21/10", "info": "", "entreprise": "", "titre": "Commercial and Marketing Dir."}, {"m": "dirco", "nom": "Profil DIRC-09", "poste": "directeur commercial", "depuis": "", "li": "", "cv": "", "note": null, "etape": "Identifié", "src": "Carte des talents du 26/10 (non noté)", "info": "", "entreprise": "", "titre": "directeur commercial"}, {"m": "dirco", "nom": "Profil DIRC-10", "poste": "directeur commercial", "depuis": "", "li": "", "cv": "", "note": null, "etape": "Identifié", "src": "Carte des talents du 26/10 (non noté)", "info": "", "entreprise": "", "titre": "directeur commercial"}, {"m": "dirco", "nom": "Profil DIRC-11", "poste": "directeur des ventes", "depuis": "", "li": "", "cv": "", "note": null, "etape": "Identifié", "src": "Carte des talents du 26/10 (non noté)", "info": "", "entreprise": "", "titre": "directeur des ventes"}, {"m": "dirco", "nom": "Profil DIRC-12", "poste": "Commercial Director West Africa", "depuis": "", "li": "", "cv": "", "note": null, "etape": "Identifié", "src": "Carte des talents du 26/10 (non noté)", "info": "", "entreprise": "", "titre": "Commercial Director West Africa"}, {"m": "dirco", "nom": "Profil DIRC-13", "poste": "dir. commercial et marketing", "depuis": "", "li": "", "cv": "", "note": null, "etape": "Identifié", "src": "Carte des talents du 26/10 (non noté)", "info": "", "entreprise": "", "titre": "dir. commercial et marketing"}, {"m": "dirco", "nom": "Profil DIRC-14", "poste": "directeur commercial export", "depuis": "", "li": "", "cv": "", "note": null, "etape": "Identifié", "src": "Carte des talents du 26/10 (non noté)", "info": "", "entreprise": "", "titre": "directeur commercial export"}, {"m": "dirco", "nom": "Profil DIRC-15", "poste": "directeur commercial", "depuis": "", "li": "", "cv": "", "note": null, "etape": "Identifié", "src": "Carte des talents du 26/10 (non noté)", "info": "", "entreprise": "", "titre": "directeur commercial"}, {"m": "dirco", "nom": "Profil DIRC-16", "poste": "dir. commercial et marketing", "depuis": "", "li": "", "cv": "", "note": null, "etape": "Identifié", "src": "Carte des talents du 26/10 (non noté)", "info": "", "entreprise": "", "titre": "dir. commercial et marketing"}, {"m": "dirco", "nom": "Profil DIRC-17", "poste": "directeur commercial", "depuis": "", "li": "", "cv": "", "note": null, "etape": "Identifié", "src": "Carte des talents du 26/10 (non noté)", "info": "", "entreprise": "", "titre": "directeur commercial"}, {"m": "dirco", "nom": "Profil DIRC-18", "poste": "directeur régional des ventes (Est)", "depuis": "", "li": "", "cv": "", "note": null, "etape": "Identifié", "src": "Carte des talents du 26/10 (non noté)", "info": "", "entreprise": "", "titre": "directeur régional des ventes (Est)"}, {"m": "dirco", "nom": "Profil DIRC-19", "poste": "Identité au dossier du mandat", "depuis": "", "li": "", "cv": "", "note": null, "etape": "Offre", "src": "Offre et contrat du 21/10", "info": "", "entreprise": "", "titre": "Identité au dossier du mandat"}, {"m": "om", "nom": "Profil OM-01", "poste": "Poste de direction (titre masqué)", "depuis": "", "li": "", "cv": "au dossier", "note": 74, "etape": "Finaliste", "src": "Comparatif du 26/10", "info": "", "entreprise": "", "titre": "Ex-office manager, HEETCH et FLEETCH CI"}, {"m": "om", "nom": "Profil OM-02", "poste": "Poste de direction (titre masqué)", "depuis": "", "li": "", "cv": "au dossier", "note": 69, "etape": "Finaliste", "src": "Comparatif du 26/10", "info": "", "entreprise": "", "titre": "Office manager et services généraux, en poste"}, {"m": "om", "nom": "Profil OM-03", "poste": "Gestionnaire RH et paie d'intérim", "depuis": "", "li": "", "cv": "au dossier", "note": 57, "etape": "Écarté", "src": "Comparatif du 26/10", "info": "", "entreprise": "", "titre": "Gestionnaire RH et paie d'intérim"}, {"m": "brass", "nom": "Profil BRAS-01", "titre": "Directeur finance comptabilité", "entreprise": "", "poste": "Directeur finance comptabilité", "depuis": "", "li": "", "cv": "", "note": 85, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-02", "titre": "Director of Finance", "entreprise": "", "poste": "Director of Finance", "depuis": "", "li": "", "cv": "", "note": 84, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-03", "titre": "Group Chief Financial Officer", "entreprise": "", "poste": "Group Chief Financial Officer", "depuis": "", "li": "", "cv": "", "note": 82, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-04", "titre": "Finance & IS Director, cluster Côte d'Ivoire", "entreprise": "", "poste": "Poste de direction (titre masqué)", "depuis": "", "li": "", "cv": "", "note": 82, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-05", "titre": "Chief Financial Officer", "entreprise": "", "poste": "Chief Financial Officer", "depuis": "", "li": "", "cv": "", "note": 80, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-06", "titre": "Regional Financial Director", "entreprise": "", "poste": "Regional Financial Director", "depuis": "", "li": "", "cv": "", "note": 80, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-07", "titre": "Directeur financier", "entreprise": "", "poste": "Directeur financier", "depuis": "", "li": "", "cv": "", "note": 78, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-08", "titre": "Finance Director", "entreprise": "", "poste": "Finance Director", "depuis": "", "li": "", "cv": "", "note": 77, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-09", "titre": "Chief Financial Officer", "entreprise": "", "poste": "Chief Financial Officer", "depuis": "", "li": "", "cv": "", "note": 76, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-10", "titre": "Financial Director", "entreprise": "", "poste": "Financial Director", "depuis": "", "li": "", "cv": "", "note": 74, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-11", "titre": "Directeur administratif et financier", "entreprise": "", "poste": "Directeur administratif et financier", "depuis": "", "li": "", "cv": "", "note": 72, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-12", "titre": "Chief Financial Officer", "entreprise": "", "poste": "Chief Financial Officer", "depuis": "", "li": "", "cv": "", "note": 70, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-13", "titre": "Chief Financial Officer", "entreprise": "", "poste": "Chief Financial Officer", "depuis": "", "li": "", "cv": "", "note": 68, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-14", "titre": "Directeur administratif et financier", "entreprise": "", "poste": "Directeur administratif et financier", "depuis": "", "li": "", "cv": "", "note": 68, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "brass", "nom": "Profil BRAS-15", "titre": "Directeur administratif et financier", "entreprise": "", "poste": "Directeur administratif et financier", "depuis": "", "li": "", "cv": "", "note": 66, "etape": "Identifié", "src": "Carte des talents du 26/10 (score indicatif)", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-01", "titre": "Fondateur et CTO (projet non nommé)", "entreprise": "", "poste": "Fondateur et CTO (projet non nommé)", "depuis": "", "li": "", "cv": "", "note": 79, "etape": "Identifié", "src": "Profils de marché du 26/10 (score indicatif)", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-02", "titre": "VP of Engineering", "entreprise": "", "poste": "VP of Engineering", "depuis": "", "li": "", "cv": "", "note": 75, "etape": "Identifié", "src": "Profils de marché du 26/10 (score indicatif)", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-03", "titre": "Head of Engineering", "entreprise": "", "poste": "Head of Engineering", "depuis": "", "li": "", "cv": "", "note": 75, "etape": "Identifié", "src": "Profils de marché du 26/10 (score indicatif)", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-04", "titre": "Staff Engineer", "entreprise": "", "poste": "Staff Engineer", "depuis": "", "li": "", "cv": "", "note": 72, "etape": "Identifié", "src": "Profils de marché du 26/10 (score indicatif)", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-05", "titre": "Lead technique DevOps", "entreprise": "", "poste": "Lead technique DevOps", "depuis": "", "li": "", "cv": "", "note": 71, "etape": "Identifié", "src": "Profils de marché du 26/10 (score indicatif)", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-06", "titre": "Chief Technology Officer", "entreprise": "", "poste": "Chief Technology Officer", "depuis": "", "li": "", "cv": "", "note": 71, "etape": "Identifié", "src": "Profils de marché du 26/10 (score indicatif)", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-07", "titre": "Digital Health & AI Infrastructure Lead West Africa", "entreprise": "", "poste": "Poste de direction (titre masqué)", "depuis": "", "li": "", "cv": "", "note": 70, "etape": "Identifié", "src": "Profils de marché du 26/10 (score indicatif)", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-08", "titre": "Chief Technology Officer", "entreprise": "", "poste": "Chief Technology Officer", "depuis": "", "li": "", "cv": "", "note": 67, "etape": "Identifié", "src": "Profils de marché du 26/10 (score indicatif)", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-09", "titre": "Lead Software Engineer", "entreprise": "", "poste": "Lead Software Engineer", "depuis": "", "li": "", "cv": "", "note": 62, "etape": "Identifié", "src": "Profils de marché du 26/10 (score indicatif)", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-10", "titre": "Cofondateur technique", "entreprise": "", "poste": "Cofondateur technique", "depuis": "", "li": "", "cv": "au dossier", "note": 60, "etape": "Écarté", "src": "Candidature reçue", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-11", "titre": "Cofondateur et CTO d'une société de logiciels (depuis 2024)", "entreprise": "", "poste": "Poste de direction (titre masqué)", "depuis": "", "li": "", "cv": "au dossier", "note": 54, "etape": "Écarté", "src": "Candidature reçue", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-12", "titre": "Ingénieur MLOps", "entreprise": "", "poste": "Ingénieur MLOps", "depuis": "", "li": "", "cv": "au dossier", "note": 48, "etape": "Candidature reçue", "src": "Candidature reçue", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-13", "titre": "Head of AI", "entreprise": "", "poste": "Head of AI", "depuis": "", "li": "", "cv": "", "note": 57, "etape": "Candidature reçue", "src": "Candidature reçue", "info": ""}, {"m": "ycto", "nom": "Profil YCTO-14", "titre": "Non relu dans ce document", "entreprise": "", "poste": "Non relu dans ce document", "depuis": "", "li": "", "cv": "", "note": null, "etape": "Écarté", "src": "Candidature reçue", "info": ""}, {"m": "ybdm", "nom": "Profil YBDM-01", "titre": "Candidature", "entreprise": "", "poste": "Candidature", "depuis": "", "li": "", "cv": "au dossier", "note": 90, "etape": "Candidature reçue", "src": "Short-list du 26/10 · Candidature", "info": ""}, {"m": "ybdm", "nom": "Profil YBDM-02", "titre": "Poste actuel non affiché (Africa BD & WCA Operations Manager jusqu'en juin 2026)", "entreprise": "", "poste": "Poste de direction (titre masqué)", "depuis": "", "li": "", "cv": "", "note": 88, "etape": "Identifié", "src": "Short-list du 26/10 · Sourcing 26-10", "info": ""}, {"m": "ybdm", "nom": "Profil YBDM-03", "titre": "Candidature", "entreprise": "", "poste": "Candidature", "depuis": "", "li": "", "cv": "au dossier", "note": 84, "etape": "Candidature reçue", "src": "Short-list du 26/10 · Candidature", "info": ""}, {"m": "ybdm", "nom": "Profil YBDM-04", "titre": "Senior Sales Specialist Software, Afrique subsaharienne francophone", "entreprise": "", "poste": "Poste de direction (titre masqué)", "depuis": "", "li": "", "cv": "", "note": 84, "etape": "Identifié", "src": "Short-list du 26/10 · Sourcing 26-10", "info": ""}, {"m": "ybdm", "nom": "Profil YBDM-05", "titre": "Candidature", "entreprise": "", "poste": "Candidature", "depuis": "", "li": "", "cv": "au dossier", "note": 81, "etape": "Candidature reçue", "src": "Short-list du 26/10 · Candidature", "info": ""}, {"m": "ybdm", "nom": "Profil YBDM-06", "titre": "Candidature", "entreprise": "", "poste": "Candidature", "depuis": "", "li": "", "cv": "au dossier", "note": 78, "etape": "Qualifié", "src": "Short-list du 26/10 · Candidature", "info": ""}, {"m": "ybdm", "nom": "Profil YBDM-07", "titre": "Business Development Manager", "entreprise": "", "poste": "Business Development Manager", "depuis": "", "li": "", "cv": "", "note": 80, "etape": "Identifié", "src": "Short-list du 26/10 · Sourcing 21-10", "info": ""}, {"m": "ybdm", "nom": "Profil YBDM-08", "titre": "International Sales & Business Development Manager", "entreprise": "", "poste": "Poste de direction (titre masqué)", "depuis": "", "li": "", "cv": "", "note": 80, "etape": "Identifié", "src": "Short-list du 26/10 · Sourcing 21-10", "info": ""}], "etapesC": ["Identifié", "Candidature reçue", "Approché", "Qualifié", "Présenté au client", "Finaliste", "Offre", "Placé", "Écarté"], "livrables": [{"m": "cabinet", "nom": "Plan de recrutement 2027", "v": "2", "href": "", "fmt": "PDF", "type": "Pilotage", "nouveau": false}, {"m": "cabinet", "nom": "Rapport hebdomadaire", "v": "2", "href": "", "fmt": "PDF", "type": "Pilotage", "nouveau": false}, {"m": "dirco", "nom": "Argumentaire d'approche", "v": "1", "href": "", "fmt": "PDF", "type": "Approche", "nouveau": true}, {"m": "dirco", "nom": "Carte des talents", "v": "1", "href": "", "fmt": "PDF", "type": "Sourcing", "nouveau": true}, {"m": "dirco", "nom": "Fiche de poste", "v": "2", "href": "", "fmt": "PDF", "type": "Définition du poste", "nouveau": false}, {"m": "dirco", "nom": "Guide de l'entretien final", "v": "2", "href": "", "fmt": "PDF", "type": "Évaluation", "nouveau": false}, {"m": "dirco", "nom": "Offre et contrat", "v": "2", "href": "", "fmt": "PDF", "type": "Décision", "nouveau": false}, {"m": "dirco", "nom": "Préparation à la contre-offre", "v": "1", "href": "", "fmt": "PDF", "type": "Décision", "nouveau": true}, {"m": "dirco", "nom": "Proposition de mission", "v": "1", "href": "", "fmt": "PDF", "type": "Proposition", "nouveau": true}, {"m": "dirco", "nom": "Rapport d'avancement client", "v": "1", "href": "", "fmt": "PDF", "type": "Pilotage", "nouveau": true}, {"m": "dirco", "nom": "Repère de rémunération", "v": "1", "href": "", "fmt": "PDF", "type": "Rémunération", "nouveau": true}, {"m": "dirco", "nom": "Scorecard", "v": "2", "href": "", "fmt": "PDF", "type": "Définition du poste", "nouveau": false}, {"m": "dirco", "nom": "Short-list LinkedIn", "v": "2", "href": "", "fmt": "PDF", "type": "Sourcing", "nouveau": false}, {"m": "cdz", "nom": "Fiche de poste", "v": "3", "href": "", "fmt": "PDF", "type": "Définition du poste", "nouveau": false}, {"m": "cdz", "nom": "Fiche et note interne", "v": "3", "href": "", "fmt": "PDF", "type": "Définition du poste", "nouveau": false}, {"m": "cdz", "nom": "Kit d'annonce", "v": "2", "href": "", "fmt": "PDF", "type": "Sourcing", "nouveau": false}, {"m": "cdz", "nom": "Test pratique · corrigé", "v": "2", "href": "", "fmt": "PDF", "type": "Évaluation", "nouveau": false}, {"m": "cdz", "nom": "Test pratique · sujet", "v": "2", "href": "", "fmt": "PDF", "type": "Évaluation", "nouveau": false}, {"m": "raf", "nom": "Cadrage client", "v": "1", "href": "", "fmt": "PDF", "type": "Cadrage", "nouveau": true}, {"m": "raf", "nom": "Fiche de poste", "v": "2", "href": "", "fmt": "PDF", "type": "Définition du poste", "nouveau": false}, {"m": "raf", "nom": "Fiche et note interne", "v": "2", "href": "", "fmt": "PDF", "type": "Définition du poste", "nouveau": false}, {"m": "cdg", "nom": "Business case pour le DG", "v": "2", "href": "", "fmt": "PDF", "type": "Évaluation", "nouveau": false}, {"m": "om", "nom": "Comparatif des finalistes", "v": "2", "href": "", "fmt": "PDF", "type": "Évaluation", "nouveau": false}, {"m": "om", "nom": "Dossier candidat", "v": "1", "href": "", "fmt": "PDF", "type": "Présentation", "nouveau": true}, {"m": "om", "nom": "Kit de messages candidats", "v": "2", "href": "", "fmt": "PDF", "type": "Approche", "nouveau": false}, {"m": "om", "nom": "Plan d'intégration 30-60-90", "v": "2", "href": "", "fmt": "PDF", "type": "Intégration", "nouveau": false}, {"m": "om", "nom": "Références", "v": "1", "href": "", "fmt": "PDF", "type": "Décision", "nouveau": true}, {"m": "om", "nom": "Suivi de la garantie", "v": "1", "href": "", "fmt": "PDF", "type": "Intégration", "nouveau": true}, {"m": "brass", "nom": "Argumentaire d'approche", "v": "1", "href": "", "fmt": "PDF", "type": "Approche", "nouveau": true}, {"m": "brass", "nom": "Cadrage", "v": "1", "href": "", "fmt": "PDF", "type": "Cadrage", "nouveau": true}, {"m": "brass", "nom": "Carte des talents", "v": "1", "href": "", "fmt": "PDF", "type": "Sourcing", "nouveau": true}, {"m": "brass", "nom": "Dossier candidat (modèle)", "v": "1", "href": "", "fmt": "PDF", "type": "Présentation", "nouveau": true}, {"m": "brass", "nom": "Feuille de route", "v": "1", "href": "", "fmt": "PDF", "type": "Pilotage", "nouveau": true}, {"m": "brass", "nom": "Fiche de poste et scorecard", "v": "1", "href": "", "fmt": "PDF", "type": "Définition du poste", "nouveau": true}, {"m": "brass", "nom": "Grille d'entretien et étude de cas", "v": "1", "href": "", "fmt": "PDF", "type": "Évaluation", "nouveau": true}, {"m": "brass", "nom": "Intégration et garantie", "v": "1", "href": "", "fmt": "PDF", "type": "Intégration", "nouveau": true}, {"m": "brass", "nom": "Proposition de mission", "v": "1", "href": "", "fmt": "PDF", "type": "Proposition", "nouveau": true}, {"m": "brass", "nom": "Références et contre-offre", "v": "1", "href": "", "fmt": "PDF", "type": "Décision", "nouveau": true}, {"m": "brass", "nom": "Repère de rémunération", "v": "1", "href": "", "fmt": "PDF", "type": "Rémunération", "nouveau": true}, {"m": "brass", "nom": "Suivi du mandat", "v": "1", "href": "", "fmt": "Tableur", "type": "Autre", "nouveau": true}, {"m": "ycto", "nom": "Analyse des profils", "v": "1", "href": "", "fmt": "PDF", "type": "Sourcing", "nouveau": true}, {"m": "ycto", "nom": "Tableur des profils", "v": "1", "href": "", "fmt": "Tableur", "type": "Sourcing", "nouveau": true}, {"m": "ybdm", "nom": "Rapport de sourcing", "v": "1", "href": "", "fmt": "PDF", "type": "Sourcing", "nouveau": true}, {"m": "ybdm", "nom": "Tableur du sourcing", "v": "1", "href": "", "fmt": "Tableur", "type": "Sourcing", "nouveau": true}], "alertes": [{"niv": "haut", "m": "cdz", "t": "Clôture des annonces de Dakar à recaler", "d": "Rien n'est publié. Avec une publication le 27/10, la clôture du 02/11 ne laisse que six jours. Proposition : clôture au 09/11.", "quand": "2026-10-27"}, {"niv": "haut", "m": "om", "t": "Arrivée de l'office manager le lundi 2 novembre", "d": "Personne retenue, manager et période d'essai à confirmer ; références pas encore prises.", "quand": "2026-11-02"}, {"niv": "moyen", "m": "dirco", "t": "Offre du directeur commercial en attente", "d": "Package non validé, identité de l'employeur et références d'un candidat à obtenir. Risque de contre-offre à préparer.", "quand": ""}, {"niv": "moyen", "m": "raf", "t": "Mandat RAF bloqué", "d": "Pays, secteur, périmètre et rémunération inconnus : rendez-vous de cadrage à tenir.", "quand": ""}, {"niv": "bas", "m": "cdg", "t": "Décision du DG attendue", "d": "Le business case du contrôleur de gestion est prêt : ouverture du mandat si accord.", "quand": ""}, {"niv": "bas", "m": "cabinet", "t": "Liste des entreprises à ne pas chasser", "d": "Clients de Grey Search Africa et accords de non-sollicitation : à fournir avant la vague d'approche.", "quand": ""}, {"niv": "moyen", "m": "ycto", "t": "CTO : aucun candidat au niveau", "d": "30 candidatures, aucune au-dessus de 75. La chasse directe démarre dès que budget et part en capital sont tranchés.", "quand": ""}, {"niv": "moyen", "m": "ybdm", "t": "BDM : dossiers bien notés écartés", "d": "Plusieurs candidats notés plus de 80 ont été écartés dans le logiciel de recrutement : motifs à relire avant d'approcher.", "quand": ""}, {"niv": "bas", "m": "brass", "t": "DAF : vague 1 prête", "d": "15 profils identifiés et messages rédigés ; rien n'est envoyé avant validation.", "quand": ""}], "maj": "2026-10-26", "public": true};
+const PUB = !!D.public;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => (s ?? '').toString().replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt = n => n == null ? '—' : Math.round(n).toLocaleString('fr-FR');
+const I = (n, c = '') => `<svg class="i ${c}"><use href="#i-${n}"/></svg>`;
+const today = new Date(D.maj);
+const jours = d => Math.round((today - new Date(d)) / 864e5);
+const mById = Object.fromEntries(D.mandats.map(m => [m.id, m]));
+const dateFr = d => d ? new Date(d).toLocaleDateString('fr-FR', {weekday:'short', day:'numeric', month:'short'}) : '';
+const COL = {ch:'#1C1C1E', or:'#C8921A', bl:'#066AAB', ro:'#B5432F', ve:'#2E7D5B', gr:'#B9B5AC', vi:'#6B4E9B', bl2:'#3E8FC6', or2:'#E2AE3C'};
+const ST = {'En cours':COL.bl, 'En attente client':COL.or, 'Bloqué':COL.ro, 'Clos':COL.ve};
+const FAM = {Commercial:['cart', COL.or], Finance:['money', COL.bl], Tech:['chip', COL.vi], Support:['desk', COL.ve]};
+const pillStatut = s => `<span class="pill ${s==='Bloqué'?'p-bloq':s==='En attente client'?'p-att':s==='Clos'?'p-clos':'p-cours'}">${esc(s)}</span>`;
+const scColor = n => n == null ? COL.gr : n >= 80 ? COL.ve : n >= 70 ? COL.bl : n >= 60 ? COL.or : COL.ro;
+const initials = n => n.startsWith('Profil') ? n.split(' ')[1].slice(0,2) : n.replace(/[^A-Za-zÀ-ÿ\s-]/g,'').split(/[\s-]+/).filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase();
+if (PUB) $('#demo').style.display = '';
+$('#maj').textContent = today.toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'});
+const tip = $('#tip');
+document.addEventListener('mousemove', e => { tip.style.left = (e.clientX + 14) + 'px'; tip.style.top = (e.clientY + 14) + 'px'; });
+const bindTips = root => root.querySelectorAll('[data-tip]').forEach(el => { el.onmouseenter = () => { tip.innerHTML = el.dataset.tip; tip.style.opacity = 1; }; el.onmouseleave = () => tip.style.opacity = 0; });
+
+const KEY = 'gsa-demo-v2' + (PUB ? '-pub' : '');
+let S = JSON.parse(localStorage.getItem(KEY) || '{}'); S.etapes ??= {}; S.hon ??= {}; S.proba ??= {};
+const save = () => localStorage.setItem(KEY, JSON.stringify(S));
+D.candidats.forEach((c, i) => { c.i = i; c.etape0 = c.etape; if (S.etapes[i]) c.etape = S.etapes[i]; });
+
+$$('.tab').forEach(b => b.onclick = () => { $$('.tab').forEach(x => x.classList.toggle('on', x === b)); $$('section').forEach(s => s.classList.toggle('on', s.id === b.dataset.t)); });
+$('#cM').textContent = D.mandats.length; $('#cC').textContent = D.candidats.length; $('#cL').textContent = D.livrables.length;
+
+// ---------------------------------------------------------------- graphiques SVG
+function donut(el, parts, center, sub) {
+  const tot = parts.reduce((a, p) => a + p.v, 0) || 1, R = 70, r = 46, cx = 95, cy = 95; let a0 = -Math.PI / 2, s = '';
+  parts.forEach(p => { if (!p.v) return; const a1 = a0 + p.v / tot * 2 * Math.PI, la = a1 - a0 > Math.PI ? 1 : 0;
+    const P = (a, rr) => `${cx + rr * Math.cos(a)},${cy + rr * Math.sin(a)}`;
+    const d = p.v === tot ? `M${cx},${cy-R}A${R},${R} 0 1 1 ${cx-.01},${cy-R}L${cx-.01},${cy-r}A${r},${r} 0 1 0 ${cx},${cy-r}Z` : `M${P(a0,R)}A${R},${R} 0 ${la} 1 ${P(a1,R)}L${P(a1,r)}A${r},${r} 0 ${la} 0 ${P(a0,r)}Z`;
+    s += `<path d="${d}" fill="${p.c}" data-tip="<b>${esc(p.l)}</b> : ${p.v}${p.t ? '<br>' + p.t : ''}" style="cursor:pointer"/>`; a0 = a1; });
+  el.innerHTML = `<div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><svg viewBox="0 0 190 190" width="190" height="190">${s}<text x="95" y="92" text-anchor="middle" font-family="Montserrat" font-weight="700" font-size="30" fill="#1C1C1E">${center}</text><text x="95" y="112" text-anchor="middle" font-size="11" fill="#86848C">${sub}</text></svg>
+   <div style="flex:1;min-width:160px">${parts.map(p => `<div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid #E6E1D7;font-size:13px"><i style="width:11px;height:11px;border-radius:3px;background:${p.c}"></i><span style="flex:1">${esc(p.l)}</span><b style="font-family:Montserrat">${p.v}</b></div>`).join('')}</div></div>`;
+  bindTips(el);
+}
+function pipe() {
+  $('#pipe').innerHTML = `<div class="pipe">${D.etapes.map((e, i) => { const ms = D.mandats.filter(m => m.etape === i + 1);
+    return `<div class="pc ${ms.length ? '' : 'vide'}"><div class="pn">${i + 1}</div><div class="pl">${esc(e)}</div>${ms.map(m => { const c = ST[m.statut] || COL.ch;
+      return `<div class="pm" data-m="${m.id}" style="border-left-color:${c}" data-tip="<b>${esc(m.nom)}</b><br>${esc(m.client)}<br>${esc(m.statut)} · ouvert il y a ${jours(m.ouvert)} j"><b>${esc(m.nom)}</b><span>${Array.from({length: m.postes}, () => `<i style="background:${c}"></i>`).join('')} ${jours(m.ouvert)} j</span></div>`; }).join('')}</div>`; }).join('')}</div>
+   <div class="legend">${Object.entries(ST).filter(([k]) => D.mandats.some(m => m.statut === k)).map(([k, c]) => `<span><i style="background:${c}"></i>${k}</span>`).join('')}<span style="color:#86848C">· un rond par poste, ancienneté en jours</span></div>`;
+  bindTips($('#pipe')); $$('#pipe .pm').forEach(g => g.onclick = () => ouvrir(g.dataset.m));
+}
+function funnel(id) {
+  const m = mById[id], f = m.entonnoir.filter(x => x[1] != null); if (!f.length) { $('#funnel').innerHTML = '<div class="small">Pas encore de chiffres pour ce mandat.</div>'; return; }
+  const W = 560, rowH = 44, H = f.length * rowH, mx = Math.max(...f.map(x => x[1]), 1);
+  const w = v => v ? Math.max(Math.sqrt(v / mx) * W * .72, 34) : 18;
+  const cols = [COL.ch, '#3A3A40', COL.bl, COL.bl2, COL.or, COL.or2];
+  let s = '';
+  f.forEach(([l, v], i) => { const a = w(v), b = i < f.length - 1 ? w(f[i + 1][1]) : a * .9, cx = W * .36, y = i * rowH;
+    s += `<path d="M${cx - a / 2},${y + 2}L${cx + a / 2},${y + 2}L${cx + b / 2},${y + rowH - 2}L${cx - b / 2},${y + rowH - 2}Z" fill="${v ? cols[i % cols.length] : '#E6E1D7'}" data-tip="<b>${esc(l)}</b> : ${fmt(v)}"/>`;
+    s += `<text x="${cx}" y="${y + rowH / 2 + 5}" text-anchor="middle" font-family="Montserrat" font-weight="700" font-size="14" fill="${v ? '#fff' : '#86848C'}">${fmt(v)}</text>`;
+    s += `<text x="${W * .74}" y="${y + rowH / 2 + 4}" font-size="12.5" fill="#2B2A30">${esc(l)}</text>`;
+    if (i && f[i - 1][1]) s += `<text x="${W - 4}" y="${y + rowH / 2 + 4}" text-anchor="end" font-size="11" fill="#86848C">${Math.round(v / f[i - 1][1] * 100)} %</text>`; });
+  $('#funnel').innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%">${s}</svg><div class="small" style="margin-top:6px">${esc(m.nom)} · ${esc(m.client)} · largeur en racine carrée pour garder les petites valeurs lisibles ; à droite, le taux de passage.</div>`;
+  bindTips($('#funnel'));
+}
+function histo() {
+  const notes = D.candidats.map(c => c.note).filter(n => n != null);
+  const bins = [[0, 50], [50, 60], [60, 70], [70, 80], [80, 90], [90, 101]], W = 340, H = 170, bw = W / bins.length;
+  const cnt = bins.map(([a, b]) => notes.filter(n => n >= a && n < b).length), mx = Math.max(...cnt, 1);
+  let s = '';
+  bins.forEach(([a, b], i) => { const h = cnt[i] / mx * (H - 40), x = i * bw;
+    s += `<rect x="${x + 6}" y="${H - 22 - h}" width="${bw - 12}" height="${h}" rx="3" fill="${scColor(a + 1)}" data-tip="Notes ${a} à ${b > 100 ? 100 : b - 1} : <b>${cnt[i]}</b>"/>`;
+    s += `<text x="${x + bw / 2}" y="${H - 27 - h}" text-anchor="middle" font-family="Montserrat" font-weight="700" font-size="12">${cnt[i]}</text>`;
+    s += `<text x="${x + bw / 2}" y="${H - 6}" text-anchor="middle" font-size="10" fill="#86848C">${a ? a + '-' + (b > 100 ? 100 : b - 1) : '<50'}</text>`; });
+  const moy = notes.reduce((a, b) => a + b, 0) / notes.length;
+  $('#histo').innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%">${s}</svg><div class="small">${notes.length} candidats notés · moyenne <b>${Math.round(moy)}</b> · ${notes.filter(n => n >= 80).length} à 80 ou plus</div>`;
+  bindTips($('#histo'));
+}
+function age() {
+  const L = [...D.mandats].sort((a, b) => jours(b.ouvert) - jours(a.ouvert)), mx = Math.max(...L.map(m => jours(m.ouvert)), 1), W = 340, rh = 22, H = L.length * rh;
+  let s = '';
+  L.forEach((m, i) => { const d = jours(m.ouvert), w = Math.max(d / mx * (W - 175), 3), y = i * rh;
+    s += `<text x="0" y="${y + 14}" font-size="10.5" fill="#2B2A30">${esc(m.nom.length > 20 ? m.nom.slice(0, 19) + '…' : m.nom)}</text><rect x="128" y="${y + 4}" width="${w}" height="13" rx="2" fill="${ST[m.statut] || COL.ch}" data-tip="${esc(m.nom)} : ouvert le ${new Date(m.ouvert).toLocaleDateString('fr-FR')}"/><text x="${134 + w}" y="${y + 14}" font-size="10.5" font-weight="600">${d} j</text>`; });
+  $('#age').innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%">${s}</svg>`; bindTips($('#age'));
+}
+function geo() {
+  const pays = {}; D.mandats.forEach(m => pays[m.pays] = (pays[m.pays] || 0) + m.postes);
+  const fam = {}; D.mandats.forEach(m => fam[m.famille] = (fam[m.famille] || 0) + m.postes);
+  const tot = Object.values(pays).reduce((a, b) => a + b, 0);
+  $('#geo').innerHTML = Object.entries(pays).sort((a, b) => b[1] - a[1]).map(([p, n]) => `<div style="display:flex;align-items:center;gap:10px;margin:8px 0;font-size:13px">${I('pin')}<span style="flex:1">${esc(p)}</span><div style="width:110px;height:8px;background:#F5F2EC;border-radius:4px"><div style="width:${n / tot * 100}%;height:100%;background:#1C1C1E;border-radius:4px"></div></div><b style="width:22px;text-align:right">${n}</b></div>`).join('')
+   + `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px">${Object.entries(fam).map(([f, n]) => { const [ic, c] = FAM[f] || ['brief', COL.ch]; return `<div style="background:#F5F2EC;padding:10px;display:flex;gap:9px;align-items:center"><span style="width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:${c};color:#fff">${I(ic)}</span><span style="font-size:12px;line-height:1.2">${f}<br><b style="font-family:Montserrat;font-size:16px">${n}</b> <span class="small">poste${n > 1 ? 's' : ''}</span></span></div>`; }).join('')}</div>`;
+}
+const TYPES = ['Proposition', 'Cadrage', 'Définition du poste', 'Rémunération', 'Sourcing', 'Approche', 'Évaluation', 'Présentation', 'Décision', 'Intégration', 'Pilotage', 'Autre'];
+function prod() {
+  const ts = TYPES.filter(t => D.livrables.some(l => l.type === t)), W = 1000, H = 200, bw = W / ts.length;
+  const cnt = ts.map(t => [D.livrables.filter(l => l.type === t && !l.nouveau).length, D.livrables.filter(l => l.type === t && l.nouveau).length]);
+  const mx = Math.max(...cnt.map(([a, b]) => a + b), 1); let s = '';
+  ts.forEach((t, i) => { const [a, b] = cnt[i], x = i * bw + 14, w = bw - 28, ha = a / mx * (H - 50), hb = b / mx * (H - 50);
+    s += `<rect x="${x}" y="${H - 24 - ha}" width="${w}" height="${ha}" fill="#1C1C1E" data-tip="${t} : ${a} existants"/><rect x="${x}" y="${H - 24 - ha - hb}" width="${w}" height="${hb}" fill="#C8921A" data-tip="${t} : ${b} nouveaux"/>`;
+    s += `<text x="${x + w / 2}" y="${H - 30 - ha - hb}" text-anchor="middle" font-family="Montserrat" font-weight="700" font-size="13">${a + b}</text>${t.split(' ').length > 1 && t.length > 11 ? `<text x="${x + w / 2}" y="${H - 12}" text-anchor="middle" font-size="10.5" fill="#55535B">${t.split(' ')[0]}</text><text x="${x + w / 2}" y="${H}" text-anchor="middle" font-size="10.5" fill="#55535B">${t.split(' ').slice(1).join(' ')}</text>` : `<text x="${x + w / 2}" y="${H - 7}" text-anchor="middle" font-size="10.5" fill="#55535B">${t}</text>`}`; });
+  $('#prod').innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%">${s}</svg><div class="legend"><span><i style="background:#1C1C1E"></i>Livrables refaits</span><span><i style="background:#C8921A"></i>Nouveaux outils de chasse</span><span style="color:#86848C">· ${D.livrables.length} documents au total</span></div>`;
+  bindTips($('#prod'));
+}
+function spark(vals, c) { const mx = Math.max(...vals, 1); return `<svg class="spark" width="64" height="22">${vals.map((v, i) => `<rect x="${i * 9}" y="${22 - v / mx * 20}" width="6" height="${v / mx * 20}" fill="${c}" opacity="${.35 + i / vals.length * .65}"/>`).join('')}</svg>`; }
+
+function vue() {
+  const ouverts = D.mandats.filter(m => m.etape < 7), postes = ouverts.reduce((a, m) => a + m.postes, 0);
+  const att = D.mandats.filter(m => m.statut === 'En attente client').length, bloq = D.mandats.filter(m => m.statut === 'Bloqué').length;
+  const vivier = D.candidats.filter(c => c.etape !== 'Écarté').length;
+  const top = D.candidats.filter(c => (c.note ?? 0) >= 80 && c.etape !== 'Écarté').length;
+  const perEt = D.etapes.map((_, i) => D.mandats.filter(m => m.etape === i + 1).length);
+  const k = [['brief', ouverts.length, 'Mandats ouverts', '', spark(perEt, '#1C1C1E')], ['target', postes, 'Postes à pourvoir', 'bl', ''],
+    ['pause', att, 'En attente du client', 'or', ''], ['alert', bloq, 'Mandat bloqué', 'ro', ''],
+    ['users', vivier, 'Candidats suivis dans le vivier', '', ''], ['check', top, 'Profils notés 80 ou plus', 've', ''],
+    ['file', D.livrables.length, 'Livrables produits', '', ''], ['clock', '—', 'Délai moyen de recrutement · aucune offre acceptée à ce jour', '', '']];
+  $('#kpis').innerHTML = k.map(([ic, v, l, c, sp]) => `<div class="kpi ${c}"><div class="ic">${I(ic)}</div><div><div class="big">${v}</div><div class="l">${l}</div></div>${sp}</div>`).join('');
+  pipe();
+  donut($('#donut'), Object.entries(ST).map(([l, c]) => ({l, c, v: D.mandats.filter(m => m.statut === l).length, t: D.mandats.filter(m => m.statut === l).map(m => esc(m.nom)).join('<br>')})).filter(p => p.v), D.mandats.length, 'mandats');
+  const fs = $('#fSel'); if (!fs.options.length) { D.mandats.filter(m => m.entonnoir.length).forEach(m => fs.insertAdjacentHTML('beforeend', `<option value="${m.id}">${esc(m.nom)}</option>`)); fs.value = 'ybdm'; fs.onchange = () => funnel(fs.value); }
+  funnel(fs.value);
+  const icA = {haut: 'alert', moyen: 'pause', bas: 'info'};
+  $('#alertes').innerHTML = D.alertes.map(a => `<div class="al ${a.niv}" data-m="${a.m}"><div class="ai">${I(icA[a.niv])}</div><div><div class="t">${esc(a.t)}</div><div class="d">${esc(a.d)}</div><div class="q">${a.m === 'cabinet' ? 'Cabinet' : esc(mById[a.m].nom)}${a.quand ? ' · ' + dateFr(a.quand) : ''}</div></div></div>`).join('');
+  $$('#alertes .al').forEach(e => e.onclick = () => e.dataset.m !== 'cabinet' && ouvrir(e.dataset.m));
+  histo(); age(); geo(); prod();
+}
+
+// ---------------------------------------------------------------- mandats
+function opts(sel, vals) { vals.forEach(v => sel.insertAdjacentHTML('beforeend', `<option>${esc(v)}</option>`)); }
+opts($('#fStatut'), [...new Set(D.mandats.map(m => m.statut))]); opts($('#fPays'), [...new Set(D.mandats.map(m => m.pays))]); opts($('#fFam'), [...new Set(D.mandats.map(m => m.famille))]);
+function mandats() {
+  const st = $('#fStatut').value, py = $('#fPays').value, fa = $('#fFam').value;
+  const L = D.mandats.filter(m => (!st || m.statut === st) && (!py || m.pays === py) && (!fa || m.famille === fa));
+  $('#nbM').textContent = `${L.length} mandat${L.length > 1 ? 's' : ''}`;
+  $('#listeM').innerHTML = L.map(m => { const [ic, c] = FAM[m.famille] || ['brief', COL.ch]; const cs = D.candidats.filter(x => x.m === m.id);
+    const best = Math.max(...cs.map(x => x.note ?? 0), 0);
+    return `<div class="m" data-m="${m.id}">
+    <div class="top"><div class="fam"><span class="ic" style="color:${c}">${I(ic)}</span>${esc(m.famille)}</div>${pillStatut(m.statut)}</div>
+    <h3>${esc(m.nom)}</h3><div class="cl">${esc(m.client)}</div><div class="lieu">${I('pin')}${esc(m.lieu)} · ${m.postes} poste${m.postes > 1 ? 's' : ''}</div>
+    <div class="steps">${D.etapes.map((_, i) => `<i class="${i + 1 < m.etape ? 'f' : i + 1 === m.etape ? 'c' : ''}"></i>`).join('')}</div>
+    <div class="et"><span>Étape ${m.etape} · ${D.etapes[m.etape - 1]}</span><span class="small">ouvert il y a ${jours(m.ouvert)} j</span></div>
+    <div class="stats"><div><b>${cs.length}</b><span>candidats</span></div><div><b>${best || '—'}</b><span>meilleure note</span></div><div><b>${D.livrables.filter(l => l.m === m.id).length}</b><span>livrables</span></div></div>
+    <div class="bl"><b>Ce qui bloque :</b> ${esc(m.bloque)}<br><b>Prochaine action :</b> ${esc(m.action)}${m.pour ? ' · <b>' + dateFr(m.pour) + '</b>' : ''}</div></div>`; }).join('');
+  $$('#listeM .m').forEach(e => e.onclick = () => ouvrir(e.dataset.m));
+}
+$('#fStatut').onchange = $('#fPays').onchange = $('#fFam').onchange = mandats;
+
+const avatar = c => `<span class="av" style="background:${scColor(c.note)}">${esc(initials(c.nom))}</span>`;
+const scoreBar = n => n == null ? '<span class="sub">non noté</span>' : `<div class="score"><div class="b"><i style="width:${n}%;background:${scColor(n)}"></i></div><b>${n}</b></div>`;
+const lkIn = c => c.li ? `<a class="lk" href="${c.li}" target="_blank" rel="noopener">${I('in')}Profil</a>` : `<span class="lk off">${I('in')}${PUB ? 'masqué' : 'non fourni'}</span>`;
+const lkCv = c => c.cv && c.cv.startsWith('http') ? `<a class="lk" href="${c.cv}" target="_blank" rel="noopener">${I('cv')}CV</a>` : `<span class="lk off">${I('cv')}${c.cv ? esc(c.cv) : 'non reçu'}</span>`;
+
+function ouvrir(id) {
+  const m = mById[id], cs = D.candidats.filter(c => c.m === id).sort((a, b) => (b.note ?? -1) - (a.note ?? -1)), ls = D.livrables.filter(l => l.m === id);
+  $('#dContent').innerHTML = `<div class="hd"><div class="k">Mandat · ${esc(m.client)}</div><h2>${esc(m.nom)}</h2><div style="font-size:12px;color:#CFCBC3">${esc(m.lieu)}</div>
+   <div class="steps" style="margin-top:16px">${D.etapes.map((e, i) => `<i class="${i + 1 < m.etape ? 'f' : i + 1 === m.etape ? 'c' : ''}" style="${i + 1 < m.etape ? 'background:#fff' : ''}" title="${e}"></i>`).join('')}</div><div style="font-size:12px">Étape ${m.etape} · ${D.etapes[m.etape - 1]}</div></div>
+  <div class="bd"><div class="kv">
+   <div><span>Statut</span><span>${pillStatut(m.statut)}</span></div>
+   <div><span>Ouvert le</span><span>${new Date(m.ouvert).toLocaleDateString('fr-FR')} (${jours(m.ouvert)} j)</span></div>
+   <div><span>Responsable</span><span>${esc(m.qui)}</span></div>
+   <div><span>Ce qui bloque</span><span>${esc(m.bloque)}</span></div>
+   <div><span>Prochaine action</span><span>${esc(m.action)}${m.pour ? ' · ' + dateFr(m.pour) : ''}</span></div>
+   ${m.drive ? `<div><span>Dossier partagé</span><span><a href="${m.drive}" target="_blank" rel="noopener">Ouvrir le dossier du mandat</a></span></div>` : ''}</div>
+   ${m.entonnoir.length ? `<h3>${I('funnel')}Entonnoir</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${m.entonnoir.map(([l, v]) => `<div style="flex:1;min-width:90px;background:#F5F2EC;padding:9px;text-align:center"><b style="font-family:Montserrat;font-size:18px;display:block">${v == null ? '—' : fmt(v)}</b><span class="small">${esc(l)}</span></div>`).join('')}</div>` : ''}
+   <h3>${I('users')}Candidats (${cs.length})</h3>${cs.length ? '<table>' + cs.map(c => `<tr><td><div class="who">${avatar(c)}<div><b>${esc(c.nom)}</b><div class="sub">${esc(c.poste)}</div></div></div></td><td>${esc(c.etape)}</td><td>${scoreBar(c.note)}</td><td>${lkIn(c)}</td></tr>`).join('') + '</table>' : '<div class="small">Aucun candidat à ce stade.</div>'}
+   <h3>${I('file')}Livrables (${ls.length})</h3>${ls.map(l => `<div style="padding:6px 0;border-bottom:1px solid #E6E1D7;font-size:13px;display:flex;gap:8px;align-items:center">${I('file')}${l.href ? `<a href="${l.href}" target="_blank">${esc(l.nom)}</a>` : esc(l.nom)} <span class="small">v${l.v} · ${l.fmt}</span> ${l.nouveau ? '<span class="pill p-new">Nouveau</span>' : ''}</div>`).join('')}
+  </div>`;
+  $('#drawer').classList.add('on'); $('#shade').classList.add('on');
+}
+$('#dx').onclick = $('#shade').onclick = () => { $('#drawer').classList.remove('on'); $('#shade').classList.remove('on'); };
+document.addEventListener('keydown', e => e.key === 'Escape' && $('#dx').click());
+
+// ---------------------------------------------------------------- candidats
+D.mandats.forEach(m => $('#fcM').insertAdjacentHTML('beforeend', `<option value="${m.id}">${esc(m.nom)}</option>`));
+opts($('#fcE'), D.etapesC);
+let vc = 'table', tri = {k: 'note', d: -1};
+$$('#segC button').forEach(b => b.onclick = () => { vc = b.dataset.v; $$('#segC button').forEach(x => x.classList.toggle('on', x === b)); cands(); });
+function setEtape(i, e) { const c = D.candidats[i]; c.etape = e; if (e === c.etape0) delete S.etapes[i]; else S.etapes[i] = e; save(); cands(); vue(); }
+function cands() {
+  const fm = $('#fcM').value, fe = $('#fcE').value, q = $('#fcQ').value.toLowerCase();
+  let L = D.candidats.filter(c => (!fm || c.m === fm) && (!fe || c.etape === fe) && (!q || (c.nom + ' ' + c.poste).toLowerCase().includes(q)));
+  L.sort((a, b) => { const x = a[tri.k] ?? -1, y = b[tri.k] ?? -1; return (x > y ? 1 : x < y ? -1 : 0) * tri.d; });
+  $('#vTable').style.display = vc === 'table' ? '' : 'none'; $('#vKanban').style.display = vc === 'kanban' ? '' : 'none';
+  $('#vTable').innerHTML = `<table><tr><th data-k="nom">Candidat</th><th data-k="m">Mandat</th><th data-k="note">Note</th><th>Étape</th><th>LinkedIn</th><th>CV</th><th>Source</th></tr>` +
+    L.map(c => `<tr><td><div class="who">${avatar(c)}<div><b>${esc(c.nom)}</b><div class="sub">${esc(c.poste)}${c.depuis ? ' · depuis ' + esc(c.depuis) : ''}</div>${c.info ? `<div class="sub">${esc(c.info)}</div>` : ''}</div></div></td>
+    <td>${esc(mById[c.m].nom)}</td><td>${scoreBar(c.note)}</td>
+    <td><select data-i="${c.i}">${D.etapesC.map(e => `<option ${e === c.etape ? 'selected' : ''}>${e}</option>`).join('')}</select></td>
+    <td>${lkIn(c)}</td><td>${lkCv(c)}</td><td class="sub">${esc(c.src)}</td></tr>`).join('') + '</table>';
+  $$('#vTable th[data-k]').forEach(th => th.onclick = () => { tri = {k: th.dataset.k, d: tri.k === th.dataset.k ? -tri.d : (th.dataset.k === 'note' ? -1 : 1)}; cands(); });
+  $$('#vTable select').forEach(s => s.onchange = () => setEtape(+s.dataset.i, s.value));
+  $('#vKanban').innerHTML = `<div class="kanban">${D.etapesC.map(e => { const cs = L.filter(c => c.etape === e);
+    return `<div class="col" data-e="${e}"><h4>${e}<span>${cs.length}</span></h4>${cs.map(c => `<div class="cc" draggable="true" data-i="${c.i}" style="border-left-color:${scColor(c.note)}"><b>${esc(c.nom)}</b><span>${esc(mById[c.m].nom)}${c.note != null ? ' · ' + c.note : ''}</span></div>`).join('')}</div>`; }).join('')}</div>`;
+  $$('.cc').forEach(cc => cc.ondragstart = ev => ev.dataTransfer.setData('text', cc.dataset.i));
+  $$('.col').forEach(col => { col.ondragover = ev => { ev.preventDefault(); col.classList.add('over'); }; col.ondragleave = () => col.classList.remove('over');
+    col.ondrop = ev => { ev.preventDefault(); col.classList.remove('over'); setEtape(+ev.dataTransfer.getData('text'), col.dataset.e); }; });
+}
+$('#fcM').onchange = $('#fcE').onchange = $('#fcQ').oninput = cands;
+$('#reset').onclick = () => { S.etapes = {}; save(); D.candidats.forEach(c => c.etape = c.etape0); cands(); vue(); };
+
+// ---------------------------------------------------------------- livrables
+D.mandats.forEach(m => $('#flM').insertAdjacentHTML('beforeend', `<option value="${m.id}">${esc(m.nom)}</option>`));
+$('#flM').insertAdjacentHTML('beforeend', '<option value="cabinet">Pilotage du cabinet</option>');
+opts($('#flT'), TYPES.filter(t => D.livrables.some(l => l.type === t)));
+function livs() {
+  const fm = $('#flM').value, ft = $('#flT').value, fn = $('#flN').checked;
+  const L = D.livrables.filter(l => (!fm || l.m === fm) && (!ft || l.type === ft) && (!fn || l.nouveau));
+  $('#nbL').textContent = `${L.length} document${L.length > 1 ? 's' : ''}`;
+  $('#tLiv').innerHTML = L.map(l => { const m = mById[l.m]; const c = l.fmt === 'Tableur' ? COL.ve : l.nouveau ? COL.or : COL.ch;
+    return `<div class="lv"><div class="fi" style="background:${c}">${l.fmt === 'Tableur' ? 'XLSX' : 'PDF'}</div><div><b>${l.href ? `<a href="${l.href}" target="_blank" style="color:inherit">${esc(l.nom)}</a>` : esc(l.nom)}</b>
+     <div class="sub">${m ? esc(m.nom) : 'Pilotage du cabinet'} · ${esc(l.type)} · v${l.v}</div>${l.nouveau ? '<div style="margin-top:6px"><span class="pill p-new">Nouveau</span></div>' : ''}</div></div>`; }).join('');
+}
+$('#flM').onchange = $('#flT').onchange = $('#flN').onchange = livs;
+
+// ---------------------------------------------------------------- honoraires
+const P0 = {1: 10, 2: 25, 3: 35, 4: 50, 5: 75, 6: 95, 7: 100};
+const proba = e => S.proba[e] ?? P0[e];
+function hon() {
+  const tx = S.tx || 0; $('#tx').value = S.tx || '';
+  let tot = 0, pond = 0, manque = 0; const bars = [];
+  $('#tHon').innerHTML = '<table><tr><th>Mandat</th><th>Étape</th><th>Postes</th><th>Salaire annuel brut (FCFA)</th><th>Taux %</th><th>Honoraires</th><th>Pondéré</th></tr>' + D.mandats.map(m => {
+    const h = S.hon[m.id] || {}, sal = h.sal, t = h.tx ?? tx, v = sal && t ? sal * t / 100 * m.postes : 0, p = v * proba(m.etape) / 100;
+    tot += v; pond += p; if (!sal) manque++; bars.push([m.nom, v, p]);
+    return `<tr><td><b>${esc(m.nom)}</b><div class="sub">${esc(m.client)}</div></td><td>${m.etape} · ${D.etapes[m.etape - 1]}<div class="sub">probabilité ${proba(m.etape)} %</div></td><td>${m.postes}</td>
+     <td><input type="number" min="0" step="100000" data-m="${m.id}" data-f="sal" value="${sal ?? ''}" placeholder="à saisir"></td>
+     <td><input type="number" min="0" max="50" step="0.5" data-m="${m.id}" data-f="tx" value="${h.tx ?? ''}" placeholder="${tx || 'défaut'}" style="width:80px"></td>
+     <td><b>${v ? fmt(v) : '—'}</b></td><td>${p ? fmt(p) : '—'}</td></tr>`; }).join('') + '</table>';
+  $$('#tHon input').forEach(i => i.onchange = () => { const m = i.dataset.m; S.hon[m] ??= {}; if (i.value === '') delete S.hon[m][i.dataset.f]; else S.hon[m][i.dataset.f] = +i.value; save(); hon(); });
+  $('#kHon').innerHTML = [['coins', tot ? fmt(tot) : '—', 'Honoraires si tous les mandats aboutissent (FCFA)', ''], ['target', pond ? fmt(pond) : '—', "Prévision pondérée par l'étape (FCFA)", 'or'], ['alert', manque, 'Mandat(s) sans salaire saisi', manque ? 'ro' : 've']]
+    .map(([ic, v, l, c]) => `<div class="kpi ${c}"><div class="ic">${I(ic)}</div><div><div class="big">${v}</div><div class="l">${l}</div></div></div>`).join('');
+  const mx = Math.max(...bars.map(b => b[1]), 0);
+  const hb = bars.filter(b => b[1]);
+  $('#cHon').innerHTML = mx ? `<div class="hbars">${hb.map(([n, v, p]) => `<div class="hb"><span class="hn">${esc(n)}</span><span class="ht"><i class="hv" style="width:${v / mx * 100}%"></i><i class="hp" style="width:${p / mx * 100}%"></i></span><span class="hx"><b>${fmt(p)}</b> / ${fmt(v)}</span></div>`).join('')}</div><div class="legend"><span><i style="background:#C8921A"></i>Pondéré</span><span><i style="background:#E6E1D7"></i>Si le mandat aboutit</span><span style="color:#86848C">· seuls les mandats avec un salaire saisi apparaissent</span></div>` : '<div class="small" style="margin:10px 0">Le graphique apparaît dès qu\'un salaire et un taux sont saisis.</div>';
+  $('#probas').innerHTML = D.etapes.map((e, i) => `${i + 1} · ${e} <input type="number" min="0" max="100" style="width:58px;padding:3px" data-e="${i + 1}" value="${proba(i + 1)}"> %`).join(' &nbsp; ');
+  $$('#probas input').forEach(i => i.onchange = () => { S.proba[i.dataset.e] = +i.value; save(); hon(); });
+}
+$('#tx').onchange = () => { S.tx = +$('#tx').value || 0; save(); hon(); };
+
+vue(); mandats(); cands(); livs(); hon();
+</script>
+</body>
+</html>
